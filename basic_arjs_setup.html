@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic AR.js Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.4.0/aframe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ar.js/2.2.2/aframe-ar.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        #arjsDebugUIContainer {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        
+        .overlay-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay-info">
+        <p>Point camera at Hiro marker</p>
+        <p>Download marker: <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" target="_blank" style="color: #4CAF50;">Hiro Marker</a></p>
+    </div>
+
+    <a-scene
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true;"
+        embedded
+        gesture-detector
+    >
+        <a-marker preset="hiro">
+            <!-- Rotating cube -->
+            <a-box 
+                position="0 0.5 0" 
+                material="color: red;" 
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 2000"
+                scale="0.5 0.5 0.5">
+            </a-box>
+            
+            <!-- Floating sphere -->
+            <a-sphere 
+                position="1 1.25 -1" 
+                radius="0.25" 
+                material="color: #EF2D5E"
+                animation="property: position; to: 1 2.5 -1; dir: alternate; dur: 1000; loop: true">
+            </a-sphere>
+            
+            <!-- Spinning cylinder -->
+            <a-cylinder 
+                position="-1 0.75 -1" 
+                radius="0.3" 
+                height="1.5" 
+                material="color: blue;"
+                animation="property: rotation; to: 360 0 0; loop: true; dur: 3000">
+            </a-cylinder>
+            
+            <!-- Text -->
+            <a-text 
+                value="Hello AR!" 
+                position="0 2 0" 
+                align="center" 
+                color="white"
+                scale="2 2 2">
+            </a-text>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <script>
+        // Log when AR.js is ready
+        window.addEventListener('arjs-ready', function() {
+            console.log('AR.js is ready!');
+        });
+        
+        // Handle marker found/lost events
+        document.querySelector('a-marker').addEventListener('markerFound', function() {
+            console.log('Marker found!');
+        });
+        
+        document.querySelector('a-marker').addEventListener('markerLost', function() {
+            console.log('Marker lost!');
+        });
+    </script>
+</body>
+</html>
